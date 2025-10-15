@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import TableActions from "@/Features/Candidate/Components/CandidateSelection/TableActions";
-import type { ISelectedCandidate } from "@/Features/Candidate/types/candidate-selection.type";
+import TableActions from "@/Features/Recruitment/Components/CandidateSelection/TableActions";
+import type { ISelectedCandidate } from "@/Features/Recruitment/types/candidate-selection.type";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 

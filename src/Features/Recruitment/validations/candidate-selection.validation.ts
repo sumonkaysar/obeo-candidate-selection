@@ -11,3 +11,14 @@ export const candidateSelectionZodSchema = z.object({
     .string("Selection terms must be a string")
     .nonempty("Selection terms can't be blank"),
 });
+
+export const candidateSelectionUpdateZodSchema = z.object({
+  employeeId: z
+    .string("Employee ID must be a string")
+    .nonempty("Employee ID can't be blank")
+    .optional(),
+  selectionTerms: z
+    .string("Selection terms must be a string")
+    .nonempty("Selection terms can't be blank")
+    .optional(),
+});

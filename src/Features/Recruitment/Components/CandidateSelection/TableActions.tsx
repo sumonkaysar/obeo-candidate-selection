@@ -8,7 +8,7 @@ import {
 import {
   selectDeleteId,
   selectEditId,
-} from "@/Features/Candidate/selectionCandidateSlices/SelectionCandidate.slice";
+} from "@/Features/Recruitment/recruitmentSlices/Selection.slice";
 import { useAppDispatch } from "@/Redux/hook";
 import { MoreVertical } from "lucide-react";
 

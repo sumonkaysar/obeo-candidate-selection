@@ -19,59 +19,54 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   editSelection,
   removeEditId,
   selectCandidateSelectionData,
-} from "@/Features/Candidate/selectionCandidateSlices/SelectionCandidate.slice";
-import type { ISelectedCandidate } from "@/Features/Candidate/types/candidate-selection.type";
-import { candidateSelectionZodSchema } from "@/Features/Candidate/validations/candidate-selection.validation";
+} from "@/Features/Recruitment/recruitmentSlices/Selection.slice";
+import type { ISelectedCandidate } from "@/Features/Recruitment/types/candidate-selection.type";
+import { candidateSelectionUpdateZodSchema } from "@/Features/Recruitment/validations/candidate-selection.validation";
 import { useAppDispatch, useAppSelector } from "@/Redux/hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type z from "zod";
 
 const EditSelectionForm = () => {
-  const { shortlistCandidates, selectedCandidates, editId } = useAppSelector(
+  const { selectedCandidates, selectionEditId } = useAppSelector(
     selectCandidateSelectionData
   );
   const dispatch = useAppDispatch();
-  const prevData = selectedCandidates.find((c) => c.candidateId === editId);
+  const prevData = selectedCandidates.find(
+    (c) => c.candidateId === selectionEditId
+  );
   const form = useForm({
-    resolver: zodResolver(candidateSelectionZodSchema),
+    resolver: zodResolver(candidateSelectionUpdateZodSchema),
     values: {
-      candidate:
-        shortlistCandidates.find((c) => c.candidateId === editId)?._id || "",
       employeeId: prevData?.employeeId || "",
       selectionTerms: prevData?.selectionTerms || "",
     },
   });
 
   const handleSubmit = async (
-    data: z.infer<typeof candidateSelectionZodSchema>
+    data: z.infer<typeof candidateSelectionUpdateZodSchema>
   ) => {
     try {
-      const selectedCandidate = shortlistCandidates.find(
-        (candidate) => candidate._id === data.candidate
-      );
-
-      let updatedData = {} as Partial<ISelectedCandidate>;
-
-      if (prevData?.candidateId !== selectedCandidate?.candidateId) {
-        updatedData = {
-          ...updatedData,
-          firstName: selectedCandidate?.firstName,
-          lastName: selectedCandidate?.lastName,
-          candidateId: selectedCandidate?.candidateId,
-          position: selectedCandidate?.position,
-        };
+      if (
+        selectedCandidates.some(
+          (candidate) =>
+            candidate.employeeId === data.employeeId &&
+            candidate.candidateId !== prevData?.candidateId
+        )
+      ) {
+        return toast.error(
+          `Candidate with this Employee Id: ${data.employeeId} already exists!`
+        );
       }
+
+      let updatedData = {
+        employeeId: data.employeeId,
+        selectionTerms: data.selectionTerms,
+      } as Partial<ISelectedCandidate>;
 
       if (prevData?.employeeId !== data.employeeId) {
         updatedData = {
@@ -87,8 +82,6 @@ const EditSelectionForm = () => {
         };
       }
 
-      console.log(updatedData);
-
       dispatch(editSelection(updatedData));
     } catch (err) {
       console.error(err);
@@ -97,7 +90,7 @@ const EditSelectionForm = () => {
 
   return (
     <Dialog
-      open={!!editId}
+      open={!!selectionEditId}
       onOpenChange={(open: boolean) => {
         if (!open) {
           dispatch(removeEditId());
@@ -124,40 +117,6 @@ const EditSelectionForm = () => {
                   onSubmit={form.handleSubmit(handleSubmit)}
                   className="space-y-6 px-6 py-4"
                 >
-                  <FormField
-                    control={form.control}
-                    name="candidate"
-                    render={({ field }) => (
-                      <FormItem className="grid grid-cols-[1fr_3fr] gap-4">
-                        <FormLabel className="justify-end text-[#212529]">
-                          Candidate<span className="text-red-500">*</span>
-                        </FormLabel>
-                        <Select {...field}>
-                          <FormControl>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select a candidate to shortlist" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {shortlistCandidates.map((candidate) => (
-                              <SelectItem
-                                key={candidate._id}
-                                value={candidate._id}
-                              >
-                                {candidate.firstName} {candidate.lastName} (
-                                {candidate.candidateId})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormDescription className="sr-only">
-                          Select a candidate
-                        </FormDescription>
-                        <div />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form.control}
                     name="employeeId"

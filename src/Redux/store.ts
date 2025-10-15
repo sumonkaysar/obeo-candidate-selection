@@ -1,4 +1,4 @@
-import candidateSelectionReducer from "@/Features/Candidate/selectionCandidateSlices/SelectionCandidate.slice";
+import candidateSelectionReducer from "@/Features/Recruitment/recruitmentSlices/Selection.slice";
 import { baseApi } from "@/Redux/baseApi";
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import AddSelectionForm from "@/Features/Candidate/Components/CandidateSelection/AddSelectionForm";
-import SelectionTable from "@/Features/Candidate/Components/CandidateSelection/SelectionTable";
+import AddSelectionForm from "@/Features/Recruitment/Components/CandidateSelection/AddSelectionForm";
+import SelectionTable from "@/Features/Recruitment/Components/CandidateSelection/SelectionTable";
 
 const CandidateSelection = () => {
   return (

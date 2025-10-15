@@ -1,11 +1,8 @@
-import {
-  selectedCandidatesData,
-  shortlistCandidatesData,
-} from "@/Features/Candidate/consts/candidate-selection.const";
-import type {
-  ICandidateSelectionState,
-  ITableState,
-} from "@/Features/Candidate/types/candidate-selection.type";
+import { selectedCandidatesData } from "@/Features/Recruitment/consts/candidate-selection.const";
+import { interviewCandidatesData } from "@/Features/Recruitment/consts/interview.const";
+import { shortlistCandidatesData } from "@/Features/Recruitment/consts/shortlist.const";
+import type { ITableState } from "@/Features/Recruitment/types";
+import type { ICandidateSelectionState } from "@/Features/Recruitment/types/candidate-selection.type";
 import type { RootState } from "@/Redux/store";
 import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
 import type { Updater } from "@tanstack/react-table";
@@ -13,6 +10,7 @@ import { toast } from "sonner";
 
 const initialState: ICandidateSelectionState = {
   shortlistCandidates: shortlistCandidatesData,
+  interviewCandidates: interviewCandidatesData,
   selectedCandidates: selectedCandidatesData,
   tableState: {
     globalFilter: "",
@@ -23,8 +21,8 @@ const initialState: ICandidateSelectionState = {
       pageSize: 10,
     },
   },
-  editId: "",
-  deleteId: "",
+  selectionEditId: "",
+  selectionDeleteId: "",
 };
 
 export const candidateSelectionSlice = createSlice({
@@ -37,34 +35,34 @@ export const candidateSelectionSlice = createSlice({
       console.log(current(state));
     },
     selectEditId: (state, action) => {
-      state.editId = action.payload;
+      state.selectionEditId = action.payload;
     },
     removeEditId: (state) => {
-      state.editId = "";
+      state.selectionEditId = "";
     },
     selectDeleteId: (state, action) => {
-      state.deleteId = action.payload;
+      state.selectionDeleteId = action.payload;
     },
     removeDeleteId: (state) => {
-      state.deleteId = "";
+      state.selectionDeleteId = "";
     },
     editSelection: (state, action) => {
       const selectedCandidateIndex = state.selectedCandidates.findIndex(
-        (c) => c.candidateId === state.editId
+        (c) => c.candidateId === state.selectionEditId
       );
       state.selectedCandidates[selectedCandidateIndex] = {
         ...state.selectedCandidates[selectedCandidateIndex],
         ...action.payload,
       };
       toast.success("Selected candidate updated succesfully");
-      state.editId = "";
+      state.selectionEditId = "";
     },
     deleteSelection: (state) => {
       state.selectedCandidates = state.selectedCandidates.filter(
-        (candidate) => candidate.candidateId !== state.deleteId
+        (candidate) => candidate.candidateId !== state.selectionDeleteId
       );
       toast.success("Selected candidate deleted succesfully");
-      state.deleteId = "";
+      state.selectionDeleteId = "";
     },
     updateTableState: (
       state,

@@ -6,19 +6,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import ConfirmDeleteDialog from "@/Features/Candidate/Components/CandidateSelection/ConfirmDeleteDialog";
-import EditSelectionForm from "@/Features/Candidate/Components/CandidateSelection/EditSelectionForm";
-import SearchData from "@/Features/Candidate/Components/CandidateSelection/SearchData";
-import ShowEntries from "@/Features/Candidate/Components/CandidateSelection/ShowEntries";
-import { selectionTableColumns } from "@/Features/Candidate/Components/CandidateSelection/TableColumns";
-import TablePagination from "@/Features/Candidate/Components/CandidateSelection/TablePagination";
+import ConfirmDeleteDialog from "@/Features/Recruitment/Components/CandidateSelection/ConfirmDeleteDialog";
+import EditSelectionForm from "@/Features/Recruitment/Components/CandidateSelection/EditSelectionForm";
+import SearchData from "@/Features/Recruitment/Components/CandidateSelection/SearchData";
+import ShowEntries from "@/Features/Recruitment/Components/CandidateSelection/ShowEntries";
+import { selectionTableColumns } from "@/Features/Recruitment/Components/CandidateSelection/TableColumns";
+import TablePagination from "@/Features/Recruitment/Components/CandidateSelection/TablePagination";
 import {
   deleteSelection,
   removeDeleteId,
   selectCandidateSelectionData,
   updateTableState,
-} from "@/Features/Candidate/selectionCandidateSlices/SelectionCandidate.slice";
-import type { ISelectedCandidate } from "@/Features/Candidate/types/candidate-selection.type";
+} from "@/Features/Recruitment/recruitmentSlices/Selection.slice";
+import type { ISelectedCandidate } from "@/Features/Recruitment/types/candidate-selection.type";
 import { useAppDispatch, useAppSelector } from "@/Redux/hook";
 import {
   flexRender,
@@ -31,7 +31,7 @@ import {
 } from "@tanstack/react-table";
 
 const SelectionTable = () => {
-  const { selectedCandidates, tableState, deleteId } = useAppSelector(
+  const { selectedCandidates, tableState, selectionDeleteId } = useAppSelector(
     selectCandidateSelectionData
   );
   const dispatch = useAppDispatch();
@@ -112,7 +112,7 @@ const SelectionTable = () => {
       </div>
       <TablePagination table={table} />
       <ConfirmDeleteDialog
-        open={!!deleteId}
+        open={!!selectionDeleteId}
         onOpenChange={(open: boolean) => {
           if (!open) {
             dispatch(removeDeleteId());

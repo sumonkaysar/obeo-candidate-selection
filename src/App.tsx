@@ -1,4 +1,4 @@
-import CandidateSelection from "./Features/Candidate/Pages/CandidateSelection";
+import CandidateSelection from "./Features/Recruitment/Pages/CandidateSelection";
 
 function App() {
   return <CandidateSelection />;

@@ -29,17 +29,21 @@ import {
 import {
   addSelection,
   selectCandidateSelectionData,
-} from "@/Features/Candidate/selectionCandidateSlices/SelectionCandidate.slice";
-import { candidateSelectionZodSchema } from "@/Features/Candidate/validations/candidate-selection.validation";
+} from "@/Features/Recruitment/recruitmentSlices/Selection.slice";
+import { candidateSelectionZodSchema } from "@/Features/Recruitment/validations/candidate-selection.validation";
 import { useAppDispatch, useAppSelector } from "@/Redux/hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type z from "zod";
 
 const AddSelectionForm = () => {
-  const { shortlistCandidates } = useAppSelector(selectCandidateSelectionData);
+  const { shortlistCandidates, interviewCandidates, selectedCandidates } =
+    useAppSelector(selectCandidateSelectionData);
   const dispatch = useAppDispatch();
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
   const form = useForm({
     resolver: zodResolver(candidateSelectionZodSchema),
     defaultValues: {
@@ -53,6 +57,15 @@ const AddSelectionForm = () => {
     data: z.infer<typeof candidateSelectionZodSchema>
   ) => {
     try {
+      if (
+        selectedCandidates.some(
+          (candidate) => candidate.employeeId === data.employeeId
+        )
+      ) {
+        return toast.error(
+          `Candidate with this Employee Id: ${data.employeeId} already exists!`
+        );
+      }
       const selectedCandidate = shortlistCandidates.find(
         (candidate) => candidate._id === data.candidate
       );
@@ -65,6 +78,9 @@ const AddSelectionForm = () => {
         selectionTerms: data.selectionTerms,
       };
       dispatch(addSelection(selectedData));
+      if (closeBtnRef.current) {
+        closeBtnRef.current.click();
+      }
     } catch (err) {
       console.error(err);
     }
@@ -115,7 +131,7 @@ const AddSelectionForm = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {shortlistCandidates.map((candidate) => (
+                            {interviewCandidates.map((candidate) => (
                               <SelectItem
                                 key={candidate._id}
                                 value={candidate._id}
@@ -179,7 +195,9 @@ const AddSelectionForm = () => {
           </div>
           <DialogFooter className="p-4">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button ref={closeBtnRef} variant="outline">
+                Cancel
+              </Button>
             </DialogClose>
             <Button type="submit" form="addSelection">
               Save changes
