@@ -1,47 +1,22 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import TableActions from "@/Features/Recruitment/Components/CandidateSelection/TableActions";
+import TableColumnHeader from "@/Features/Recruitment/Components/CandidateSelection/TableColumnHeader";
 import type { ISelectedCandidate } from "@/Features/Recruitment/types/candidate-selection.type";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 
 export const selectionTableColumns: ColumnDef<ISelectedCandidate>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
+    accessorKey: "sl",
+    header: "SL",
+    cell: ({ row }) => row.index + 1,
     enableSorting: false,
     enableHiding: false,
   },
   {
     id: "name",
     accessorFn: (row) => `${row.firstName} ${row.lastName}`,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <TableColumnHeader column={column} columnName="Name" />
+    ),
     cell: ({ row }) => (
       <div className="px-3">
         {row.original.firstName} {row.original.lastName}
@@ -50,64 +25,32 @@ export const selectionTableColumns: ColumnDef<ISelectedCandidate>[] = [
   },
   {
     accessorKey: "candidateId",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Candidate Id
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <TableColumnHeader column={column} columnName="Candidate Id" />
+    ),
     cell: ({ row }) => (
       <div className="px-3">{row.getValue("candidateId")}</div>
     ),
   },
   {
     accessorKey: "employeeId",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Employee Id
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <TableColumnHeader column={column} columnName="Employee Id" />
+    ),
     cell: ({ row }) => <div className="px-3">{row.getValue("employeeId")}</div>,
   },
   {
     accessorKey: "position",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Position
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <TableColumnHeader column={column} columnName="Position" />
+    ),
     cell: ({ row }) => <div className="px-3">{row.getValue("position")}</div>,
   },
   {
     accessorKey: "selectionTerms",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          selectionTerms
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <TableColumnHeader column={column} columnName="Selection Terms" />
+    ),
     cell: ({ row }) => (
       <div className="px-3">{row.getValue("selectionTerms")}</div>
     ),
