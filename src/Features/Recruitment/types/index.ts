@@ -1,4 +1,4 @@
-import type { SortingTableState } from "@tanstack/react-table";
+import type { SortingState } from "@tanstack/react-table";
 
 interface IPaginationState {
   pageIndex: number;
@@ -7,7 +7,7 @@ interface IPaginationState {
 
 export interface ITableState {
   globalFilter: string;
-  sorting: SortingTableState[];
+  sorting: SortingState;
   rowSelection: Record<string, boolean>;
   pagination: IPaginationState;
 }

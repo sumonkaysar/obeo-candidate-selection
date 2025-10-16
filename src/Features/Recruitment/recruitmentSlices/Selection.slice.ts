@@ -14,7 +14,7 @@ const initialState: ICandidateSelectionState = {
   selectedCandidates: selectedCandidatesData,
   tableState: {
     globalFilter: "",
-    sorting: [],
+    sorting: [{ desc: true, id: "name" }],
     rowSelection: {},
     pagination: {
       pageIndex: 0,
